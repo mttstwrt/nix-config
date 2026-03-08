@@ -7,15 +7,61 @@
   # Applications that belong to the user, not the system.
 
   home.packages = with pkgs; [
-    firefox
-    obsidian
+    obsidian                            # My prefered notes app
     vesktop                             # Discord client
     vlc                                 # Video playback
     nautilus                            # File manager
     pavucontrol                         # Audio control
     appimage-run                        # Run AppImages on NixOS
     protonup-qt                         # Manage Proton-GE versions
+    bitwarden-desktop                   # Bitwarden standalone app
   ];
+
+  # ─── Firefox ──────────────────────────────────────────────────────────────
+
+  programs.firefox = {
+    enable = true;
+    profiles.default = {
+      extensions.packages = with pkgs.firefox-addons; [
+        bitwarden
+        ublock-origin
+      ];
+    };
+  };
+
+  # ─── Brave ────────────────────────────────────────────────────────────────
+
+  programs.brave = {
+    enable = true;
+    commandLineArgs = [ "--ozone-platform=wayland" ];
+    extensions = [
+      { id = "nngceckbapebfimnlniiiahkandclblb"; }  # Bitwarden
+      { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; }  # uBlock Origin
+    ];
+  };
+
+  # ─── VS Code ──────────────────────────────────────────────────────────────
+
+  programs.vscodium = {
+    enable = true;
+    extensions = with pkgs.vscode-extensions; [
+      ms-vscode.cpptools
+      jnoortheen.nix-ide
+      eamodio.gitlens
+      pkief.material-icon-theme
+      ms-python.python
+      ms-python.debugpy
+      ms-python.vscode-pylance
+    ];
+    userSettings = {
+      "editor.fontSize" = 14;
+      "editor.fontFamily" = "'JetBrains Mono', monospace";
+      "editor.formatOnSave" = true;
+      "editor.tabSize" = 2;
+      "window.titleBarStyle" = "custom";  # Required for Wayland
+      "editor.minimap.enabled" = false;
+    };
+  };
 
   # ─── Hyprland ─────────────────────────────────────────────────────────────
 
